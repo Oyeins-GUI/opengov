@@ -1,0 +1,129 @@
+.section {
+   max-width: 1080px;
+   margin: 0 auto;
+   height: calc(100vh - 70px);
+   line-height: 1.25;
+}
+
+.section h1 {
+   max-width: 800px;
+   font-size: 3.5rem;
+   padding-top: 60px;
+}
+
+.section .one-liner {
+   font-size: 1rem;
+   font-weight: 700;
+   padding-top: 20px;
+}
+
+@media (max-width: 800px) {
+   .section h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      padding-inline: 10px;
+      padding-top: 30px;
+   }
+   .section .one-liner {
+      text-align: center;
+      padding-top: 20px;
+   }
+}
+
+@media (min-width: 800px) {
+   .section {
+      padding-inline: 10px;
+   }
+}
+
+.categories {
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 10px;
+}
+
+@media (max-width: 800px) {
+   .categories {
+      padding-inline: 10px;
+   }
+}
+
+.category {
+   background: linear-gradient(-330deg, rgb(48, 48, 236), rgba(255, 255, 255, 0.6));
+   color: white;
+   outline: none;
+   border: 2px solid transparent;
+   padding: 6px 10px;
+   border-radius: 160000000px;
+   cursor: pointer;
+   transition: all 0.15s linear;
+}
+
+.category:hover {
+   scale: 0.95;
+}
+.category:focus,
+.category:focus-visible {
+   border: 2px solid white;
+   scale: 0.9;
+}
+
+.categories-btn {
+   background: transparent;
+   color: white;
+   display: flex;
+   align-items: center;
+   gap: 7px;
+   margin: 40px 0 20px 0;
+   padding: 6px;
+   border-radius: 2px solid transparent;
+   border: transparent;
+   outline: none;
+   cursor: pointer;
+}
+
+.actions {
+   display: flex;
+   align-items: center;
+   justify-content: right;
+   gap: 20px;
+   margin-top: 20px;
+}
+
+.actions > div {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   background-color: #292828;
+   padding: 12px 16px;
+   border: 1px solid transparent;
+   border-radius: 160000000px;
+   cursor: pointer;
+   transition: all 0.25s linear;
+}
+
+.actions > div:hover {
+   border: 1px solid rgba(125, 125, 247, 0.8);
+}
+
+@media (max-width: 800px) {
+   .actions {
+      gap: 5px;
+      margin-right: 20px;
+   }
+}
+
+.modal {
+   background-color: black;
+   max-width: 700px;
+   min-width: 320px;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   padding: 10px 20px;
+}
+
+.modal::backdrop {
+   background-color: rgba(0, 0, 0, 0.85);
+}

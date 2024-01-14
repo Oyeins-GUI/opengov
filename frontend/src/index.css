@@ -1,0 +1,44 @@
+:root {
+   font-family: "Nanum Gothic", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+   line-height: 1.5;
+   letter-spacing: 0.25px;
+
+   font-synthesis: none;
+   text-rendering: optimizeLegibility;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   min-width: 320px;
+   min-height: 100dvh;
+   color: rgb(255, 255, 255);
+   background: linear-gradient(300deg, rgb(16, 0, 46), rgb(17, 17, 17));
+   /* background-color: #121212; */
+   position: relative;
+}
+
+::-webkit-scrollbar {
+   width: 6px;
+}
+::-webkit-scrollbar-track {
+   background: linear-gradient(300deg, rgb(16, 0, 46), rgb(17, 17, 17));
+}
+::-webkit-scrollbar-thumb {
+   background: #303030;
+   border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+   background: #555;
+}
+
+/* button:focus,
+button:focus-visible {
+   outline: 4px auto -webkit-focus-ring-color;
+} */

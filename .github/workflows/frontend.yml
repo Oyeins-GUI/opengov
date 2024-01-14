@@ -1,0 +1,22 @@
+name: Lint and Format Frontend
+
+on:
+   pull_request:
+   push:
+      branches:
+         - main
+
+jobs:
+   test:
+      runs-on: ubuntu-latest
+      defaults:
+         run:
+            working-directory: "frontend"
+
+      steps:
+         - uses: actions/checkout@v3
+         - uses: actions/setup-node@v3
+
+         - name: Run lint and format
+           run: |
+              npm run lint
