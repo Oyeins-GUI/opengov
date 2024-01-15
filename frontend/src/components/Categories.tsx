@@ -1,6 +1,4 @@
-type HandleClick = {
-   handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
-}
+import { HandleClick } from "../types"
 
 export default function Categories({ handleClick }: HandleClick) {
    return (

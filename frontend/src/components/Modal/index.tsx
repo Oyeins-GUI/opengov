@@ -1,12 +1,6 @@
 import "./modal.css"
-import { ReactNode } from "react"
 import { IoIosClose } from "react-icons/io"
-
-type ModalProps = {
-   showForm: boolean
-   onClose: () => void
-   children: ReactNode
-}
+import { ModalProps } from "../../types"
 
 export default function Modal({ showForm, onClose, children }: ModalProps) {
    if (!showForm) return null

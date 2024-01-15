@@ -4,18 +4,7 @@ import { IoIosClose } from "react-icons/io"
 import { useForm } from "react-hook-form"
 import { sha256 } from "js-sha256"
 import { useState } from "react"
-
-type CloseModal = { closeModal: () => void }
-export type DefaultFormValues = {
-   title: string
-   niche: string
-   description: string
-   amountNeeded: number
-   additionalResource: string
-   img: string
-   twitter: string
-   discord: string
-}
+import { DefaultFormValues, CloseModal } from "../../types"
 
 export default function ProposalForm({ closeModal }: CloseModal) {
    const [nicheError, setNicheError] = useState("")

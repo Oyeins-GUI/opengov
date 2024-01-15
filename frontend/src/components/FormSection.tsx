@@ -1,10 +1,4 @@
-import { UseFormRegister } from "react-hook-form"
-import { DefaultFormValues } from "./ProposalForm"
-
-type FormSelect = {
-   register: UseFormRegister<DefaultFormValues>
-   setError: React.Dispatch<React.SetStateAction<string>>
-}
+import { FormSelect } from "../types"
 
 export default function FormSection({ register, setError }: FormSelect) {
    return (
