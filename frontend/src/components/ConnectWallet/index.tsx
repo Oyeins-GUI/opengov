@@ -9,10 +9,9 @@ import { useState } from "react"
 export default function ConnectWallet() {
    const [show, setShow] = useState(false)
    const chain = useAppSelector((state) => state.chain.chain)
+   const addressDisplayed = useUserAdress(chain)
 
    if (userSession.isUserSignedIn()) {
-      const addressDisplayed = useUserAdress(chain)
-
       return (
          <div className="user flex">
             <div className="user-address flex" onClick={() => setShow((prev) => !prev)}>

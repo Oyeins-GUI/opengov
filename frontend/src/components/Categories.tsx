@@ -1,5 +1,5 @@
 type HandleClick = {
-   handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => any
+   handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
 }
 
 export default function Categories({ handleClick }: HandleClick) {

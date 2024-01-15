@@ -4,7 +4,7 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa6"
 import { useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import ProposalForm from "../ProposalForm"
-import { userSession, authenticate } from "../../utils/authenticate"
+// import { userSession, authenticate } from "../../utils/authenticate"
 import Categories from "../Categories"
 
 export default function LandingPage() {
