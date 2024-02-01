@@ -1,42 +1,54 @@
 import "./form.css"
-import FormSection from "../FormSection"
+import FormSection from "@/components/FormSection"
 import { IoIosClose } from "react-icons/io"
 import { useForm } from "react-hook-form"
-import { sha256 } from "js-sha256"
 import { useState } from "react"
-import { DefaultFormValues, CloseModal } from "../../types"
+import { DefaultFormValues, CloseModal } from "@/types"
+import { userSession, authenticate } from "@/utils/authenticate"
+import { createProposalContractCall } from "@/utils/createProposalContractCall"
+import { useAppSelector } from "@/hooks/useReduxStore"
 
 export default function ProposalForm({ closeModal }: CloseModal) {
+   const chain = useAppSelector((state) => state.chain.chain)
+
    const [nicheError, setNicheError] = useState("")
    const defaultFormValues: DefaultFormValues = {
       title: "",
       niche: "none",
-      description: "",
+      problem: "",
+      solution: "",
+      milestones: "",
       amountNeeded: 500,
-      additionalResource: "",
-      img: "",
       twitter: "",
       discord: "",
+      likes: 0,
+      dislikes: 0,
+      inReview: true,
+      additionalResource: "",
    }
    const {
-      formState: {
-         errors: { amountNeeded, description, title },
-      },
+      formState: { errors },
       register,
       handleSubmit,
+      reset,
    } = useForm({
       defaultValues: defaultFormValues,
    })
 
-   const onSubmit = (data: DefaultFormValues) => {
-      if (data?.niche === "none") {
-         setNicheError("Niche is required")
-         return
+   const onSubmit = async (data: DefaultFormValues) => {
+      if (!userSession.isUserSignedIn()) {
+         closeModal()
+         authenticate()
       } else {
-         setNicheError("")
-         const dataString = JSON.stringify(data)
-         const hash = sha256(dataString)
-         console.log({ dataString, hash })
+         if (data?.niche === "none") {
+            setNicheError("Niche is required")
+            return
+         } else {
+            setNicheError("")
+            await createProposalContractCall(data, chain)
+            reset()
+            closeModal()
+         }
       }
    }
 
@@ -48,6 +60,7 @@ export default function ProposalForm({ closeModal }: CloseModal) {
                <IoIosClose />
             </button>
          </div>
+         <p>Warning: Make sure you have a BNS name</p>
          <div className="input-group">
             <label htmlFor="title">Title</label>
             <input
@@ -58,7 +71,7 @@ export default function ProposalForm({ closeModal }: CloseModal) {
                   required: "Title is required",
                })}
             />
-            <p className="error">{title?.message}</p>
+            <p className="error">{errors.title?.message}</p>
          </div>
 
          <div className="input-group">
@@ -68,17 +81,48 @@ export default function ProposalForm({ closeModal }: CloseModal) {
          </div>
 
          <div className="input-group">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="Problem">Problem</label>
             <textarea
-               id="description"
-               placeholder="Enter description"
+               id="Problem"
+               placeholder="Enter Problem"
                cols={10}
                rows={5}
-               {...register("description", {
-                  required: "Description is required",
+               {...register("problem", {
+                  required: "Problem is required",
+                  // minLength: 300,
                })}
             />
-            <p className="error">{description?.message}</p>
+            <p className="error">{errors.problem?.message}</p>
+         </div>
+
+         <div className="input-group">
+            <label htmlFor="solution">Solution</label>
+            <textarea
+               id="solution"
+               placeholder="Enter solution"
+               cols={10}
+               rows={5}
+               {...register("solution", {
+                  required: "Solution is required",
+                  // minLength: 150,
+               })}
+            />
+            <p className="error">{errors.solution?.message}</p>
+         </div>
+
+         <div className="input-group">
+            <label htmlFor="milestones">Milestones</label>
+            <textarea
+               id="milestones"
+               placeholder="Enter milestones"
+               cols={10}
+               rows={5}
+               {...register("milestones", {
+                  required: "Milestone(s) is/are required",
+                  // minLength: 150,
+               })}
+            />
+            <p className="error">{errors.milestones?.message}</p>
          </div>
 
          <div className="input-group">
@@ -91,7 +135,7 @@ export default function ProposalForm({ closeModal }: CloseModal) {
                   required: "Amount needed is required",
                   max: {
                      message: "Must not be greater than 2500",
-                     value: 2500,
+                     value: 5000,
                   },
                   min: {
                      message: "Must not be less than 500",
@@ -99,21 +143,37 @@ export default function ProposalForm({ closeModal }: CloseModal) {
                   },
                })}
             />
-            <p className="error">{amountNeeded?.message}</p>
+            <p className="error">{errors.amountNeeded?.message}</p>
          </div>
 
          <div className="input-group">
             <label htmlFor="twitter">Twitter(X) Username</label>
-            <input type="text" id="twitter" placeholder="Provide twitter username" {...register("twitter")} />
+            <input
+               type="text"
+               id="twitter"
+               placeholder="Provide twitter username"
+               {...register("twitter", {
+                  required: "Twitter(X) username is required",
+               })}
+            />
+            <p className="error">{errors.twitter?.message}</p>
          </div>
 
          <div className="input-group">
             <label htmlFor="discord">Discord Username</label>
-            <input type="text" id="discord" placeholder="Provide discord username" {...register("discord")} />
+            <input
+               type="text"
+               id="discord"
+               placeholder="Provide discord username"
+               {...register("discord", {
+                  required: "Discord username is required",
+               })}
+            />
+            <p className="error">{errors.discord?.message}</p>
          </div>
 
          <div className="input-group">
-            <label htmlFor="file">Additional Resource</label>
+            <label htmlFor="additional-resource">Additional Resource</label>
             <input
                type="text"
                id="additional-resource"
@@ -122,10 +182,6 @@ export default function ProposalForm({ closeModal }: CloseModal) {
             />
          </div>
 
-         <div className="input-group">
-            <label htmlFor="file">Image</label>
-            <input type="file" id="file" accept="image/png, image/jpg, image/jpeg" {...register("img", {})} />
-         </div>
          <button type="submit" className="form-btn">
             Create Proposal
          </button>

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-interface ChainType {
-   chain: string
+type ChainType = {
+   chain: "mainnet" | "testnet" | "devnet"
 }
 
 const initialState: ChainType = {

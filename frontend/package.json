@@ -13,6 +13,7 @@
       "@reduxjs/toolkit": "^2.0.1",
       "@stacks/connect-react": "^22.3.0",
       "@stacks/network": "^6.10.0",
+      "@stacks/storage": "^6.11.3",
       "@stacks/transactions": "^6.11.0",
       "appwrite": "^13.0.1",
       "framer-motion": "^10.16.16",

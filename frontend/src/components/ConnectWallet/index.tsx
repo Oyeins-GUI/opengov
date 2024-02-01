@@ -20,7 +20,13 @@ export default function ConnectWallet() {
                <RiArrowDropDownLine />
             </div>
             {show && (
-               <button type="button" className="disconnect" onClick={disconnect}>
+               <button
+                  type="button"
+                  className="disconnect"
+                  onClick={() => {
+                     disconnect()
+                  }}
+               >
                   Disconnect
                </button>
             )}
@@ -29,7 +35,12 @@ export default function ConnectWallet() {
    }
 
    return (
-      <button className="connect" onClick={authenticate}>
+      <button
+         className="connect"
+         onClick={() => {
+            authenticate()
+         }}
+      >
          Connect Wallet
       </button>
    )
