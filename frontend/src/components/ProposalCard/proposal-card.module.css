@@ -14,7 +14,7 @@
 .proposals_pic {
    width: 40px;
    aspect-ratio: 1/1;
-   border: 1px solid white;
+   border: 1px solid rgba(255, 255, 255, 0.3);
    border-radius: 50%;
 }
 
@@ -30,6 +30,28 @@
 .proposals_info p {
    font-size: 0.6875rem;
    margin-top: 3px;
+}
+
+.proposal_header_actions {
+   margin-left: auto;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 10px;
+}
+
+.btn {
+   background: none;
+   color: rgba(255, 255, 255, 0.9);
+   outline: none;
+   border: none;
+   font-size: 1rem;
+   cursor: pointer;
+   transition: scale 0.2s linear;
+}
+
+.btn:hover {
+   scale: 1.15;
 }
 
 .status {
@@ -59,6 +81,7 @@
 }
 
 .proposals_body p {
+   height: max-content;
    display: -webkit-box;
    -webkit-box-orient: vertical;
    -webkit-line-clamp: 5;
@@ -79,4 +102,45 @@
 .see_more:hover {
    text-decoration: underline;
    text-underline-offset: 3px;
+}
+
+.footer {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   background-color: rgb(27, 27, 27);
+   padding: 10px 7px;
+   border-radius: 7px;
+   font-size: 0.75rem;
+   font-weight: bold;
+}
+
+.footer .card_actions {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 10px;
+}
+
+.footer .card_actions a,
+.footer .card_actions button {
+   background: none;
+   color: white;
+   transition: scale 0.1s linear;
+}
+
+.footer .card_actions a:hover,
+.footer .card_actions button:hover {
+   scale: 1.15;
+}
+
+.footer .card_actions a {
+   font-size: 1rem;
+}
+
+.footer .card_actions button {
+   font-size: 1rem;
+   outline: none;
+   border: none;
+   cursor: pointer;
 }

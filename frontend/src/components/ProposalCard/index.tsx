@@ -3,9 +3,19 @@ import capitalize from "@/utils/capitalizeWords"
 import { getRelativeTime } from "@/utils/getRelativeTime"
 import { Models } from "appwrite"
 import { Link } from "react-router-dom"
+import { FaXTwitter, FaGithub, FaCopy, FaThumbsUp, FaThumbsDown } from "react-icons/fa6"
 
 export default function ProposalCard({ proposal }: { proposal: Models.Document }) {
    const timestamp = new Date(proposal.$createdAt).getTime()
+   const url = `http://localhost:5173/proposal/${proposal.$id}`
+   const copyProposalURL = async () => {
+      try {
+         await navigator.clipboard.writeText(url)
+         alert("Copied to clipboard")
+      } catch (err) {
+         alert(`Failed to copy: ${err}`)
+      }
+   }
 
    return (
       <>
@@ -33,17 +43,38 @@ export default function ProposalCard({ proposal }: { proposal: Models.Document }
                      </>
                   )}
                </div>
+               <div className={styles.proposal_header_actions}>
+                  <button className={`${styles.btn}`}>
+                     <FaThumbsUp /> {proposal.likes}
+                  </button>
+                  <button className={`${styles.btn}`}>
+                     <FaThumbsDown /> {proposal.dislikes}
+                  </button>
+               </div>
             </div>
             <div className={styles.proposals_body}>
-               <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et consectetur voluptates qui? Voluptas hic,
-                  fugiat minus enim architecto corrupti accusamus? Excepturi tempora laboriosam voluptatem dolorum
-                  repellat ut incidunt facere doloremque. Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Maiores, veniam! Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, ipsam.
-               </p>
+               <p>{proposal.description}</p>
                <Link to={`/proposal/${proposal.$id}`} className={styles.see_more}>
                   See more
                </Link>
+            </div>
+            <div className={styles.footer}>
+               <div className={styles.amount_needed}>Needed: ${proposal["amount-needed"]}</div>
+               <div className={styles.amount_gotten}>Gotten: ${proposal["amount-gotten"]}</div>
+               <div className={styles.card_actions}>
+                  <a href={`https://x.com/${proposal?.twitter}`} target="_blank">
+                     <FaXTwitter />
+                  </a>
+                  {proposal?.github !== "" && (
+                     <a href={`https://github.com/${proposal?.github}`} target="_blank">
+                        <FaGithub />
+                     </a>
+                  )}
+
+                  <button type="button" onClick={() => copyProposalURL()}>
+                     <FaCopy />
+                  </button>
+               </div>
             </div>
          </div>
       </>
