@@ -12,17 +12,18 @@ export type CloseModal = { closeModal: () => void }
 export type DefaultFormValues = {
    title: string
    niche: string
-   problem: string
-   solution: string
+   description: string
    milestones: string
-   amountNeeded: number
+   "amount-needed": number
+   "amount-gotten": number
    github?: string
    twitter: string
    discord: string
    likes: number
    dislikes: number
-   inReview: boolean
-   additionalResource: string
+   "in-review": boolean
+   "additional-resource": string
+   "proposer-address": string
 }
 
 export type HandleClick = {
