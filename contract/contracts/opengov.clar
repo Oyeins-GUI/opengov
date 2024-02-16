@@ -8,7 +8,7 @@
 (define-constant ERR_ID_DOES_NOT_EXIST (err u400))
 (define-constant ERR_INVALID_AMOUNT (err u401))
 (define-constant ERR_VOTED_ALREADY (err u402))
-(define-constant ERR_CONCLUDED (err u403))
+(define-constant ERR_STILL_IN_REVIEW (err u403))
 (define-constant ERR_INVALID_ARGS (err u404))
 
 (define-data-var proposals-id uint u0)
@@ -18,12 +18,16 @@
       id: uint,
       title: (string-ascii 50),
       niche: (string-ascii 30),
-      description: (string-ascii 500),
+      problem: (string-ascii 700),
+      solution: (string-ascii 700),
+      milestone: (string-ascii 1000),
       amount-needed: uint,
       amount-gotten: uint,
+      twitter: (string-ascii 128),
+      discord: (string-ascii 128),
       likes: uint,
       dislikes: uint,
-      concluded: bool,
+      in-review: bool,
       additional-resource: (string-ascii 128),
       proposer: principal
    }
@@ -56,7 +60,7 @@
          (proposal (unwrap! (map-get? Proposals { proposal-id: proposal-id }) ERR_ID_DOES_NOT_EXIST))
          (amount-needed (get amount-needed proposal))
          (amount-gotten (get amount-gotten proposal))
-         (concluded (get concluded proposal))
+         (in-review (get in-review proposal))
          (proposer (get proposer proposal))
          (percentage (unwrap-panic (calculate-percentage amount)))
          (amount-to-proposal (get amount-to-proposal percentage))
@@ -65,12 +69,12 @@
       (if (>= amount-to-proposal remainder)
          (if (> (- amount-to-proposal remainder) u0)
             (begin 
-               (map-set Proposals { proposal-id: proposal-id } (merge proposal { amount-gotten: (+ amount-gotten remainder), concluded: true }))
+               (map-set Proposals { proposal-id: proposal-id } (merge proposal { amount-gotten: (+ amount-gotten remainder), in-review: true }))
                (try! (stx-transfer? remainder tx-sender proposer))
                (stx-transfer? (- amount-to-proposal remainder) tx-sender POOL_ADDRESS)
             )
             (begin 
-               (map-set Proposals { proposal-id: proposal-id } (merge proposal { amount-gotten: (+ amount-gotten remainder), concluded: true }))
+               (map-set Proposals { proposal-id: proposal-id } (merge proposal { amount-gotten: (+ amount-gotten remainder), in-review: true }))
                (stx-transfer? remainder tx-sender proposer)
             )
          )
@@ -88,7 +92,11 @@
 (define-public  (create-proposal 
    (title (string-ascii 50))
    (niche (string-ascii 30))
-   (description (string-ascii 500))
+   (problem (string-ascii 700))
+   (solution (string-ascii 700))
+   (milestone (string-ascii 1000))
+   (twitter (string-ascii 128))
+   (discord (string-ascii 128))
    (amount-needed uint)
    (additional-resource (string-ascii 128))
 )
@@ -97,17 +105,21 @@
          (proposal-id (var-get proposals-id))
          (id (+ u1 proposal-id))
       )
-      ;; #[filter(title, niche, description, amount-needed, additional-resource)]
+      ;; #[filter(title, niche, problem, solution, milestone, amount-needed, additional-resource, twitter, discord)]
       (map-set Proposals { proposal-id: id } { 
             id: id,
             title: title, 
             niche: niche,
-            description: description,
+            problem: problem,
+            solution: solution,
+            milestone: milestone,
             amount-needed: amount-needed,
             amount-gotten: u0,
+            twitter: twitter,
+            discord: discord,
             likes: u0,
             dislikes: u0,
-            concluded: false,
+            in-review: true,
             additional-resource: additional-resource,
             proposer: tx-sender
       })
@@ -121,11 +133,11 @@
    (let 
       (
          (proposal (unwrap! (map-get? Proposals { proposal-id: proposal-id }) ERR_ID_DOES_NOT_EXIST))
-         (concluded (get concluded proposal))
+         (in-review (get in-review proposal))
       )
       ;; #[filter(proposal-id)]
       (asserts! (> amount u1) ERR_INVALID_AMOUNT)
-      (asserts! (is-eq concluded false) ERR_CONCLUDED)
+      (asserts! (is-eq in-review true) ERR_STILL_IN_REVIEW)
       (transfer proposal-id amount)
    )
 )
