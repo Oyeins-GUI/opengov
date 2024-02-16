@@ -120,7 +120,7 @@ export default function ProposalForm({ closeModal }: CloseModal) {
          </InputGroup>
 
          <InputGroup label="Github" error={errors.github}>
-            <input type="text" placeholder="Enter github url" {...register("github")} />
+            <input type="text" placeholder="Enter github username" {...register("github")} />
          </InputGroup>
 
          <InputGroup label="Twitter(X) Username" error={errors.twitter}>
