@@ -3,13 +3,28 @@ import App from "./App.tsx"
 import "./index.css"
 import { Provider } from "react-redux"
 import { store } from "./store"
-import { Connect } from "@stacks/connect-react"
-import { userSession } from "./utils/authenticate.ts"
-import logo from "./assets/opengov-logo2.png"
+// import { Connect } from "@stacks/connect-react"
+// import { userSession } from "./utils/authenticate.ts"
+// import logo from "./assets/opengov-logo2.png"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import Proposal from "./components/Proposal/index.tsx"
+import ErrorPage from "./components/ErrorPage/error.tsx"
+
+const router = createBrowserRouter([
+   {
+      path: "/",
+      element: <App />,
+   },
+   {
+      path: "/proposal/:id",
+      element: <Proposal />,
+      errorElement: <ErrorPage />,
+   },
+])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
    <Provider store={store}>
-      <Connect
+      {/* <Connect
          authOptions={{
             appDetails: {
                name: "Open Gov",
@@ -21,8 +36,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             },
             userSession,
          }}
-      >
-         <App />
-      </Connect>
+      > */}
+      <RouterProvider router={router} />
+      {/* </Connect> */}
    </Provider>,
 )
