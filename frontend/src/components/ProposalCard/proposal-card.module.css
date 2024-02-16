@@ -1,0 +1,82 @@
+.proposals {
+   border-radius: 3px;
+   padding: 15px;
+   background-color: rgb(17, 17, 17);
+   box-shadow: 0 2px 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.proposals_header {
+   display: flex;
+   align-items: flex-start;
+   gap: 15px;
+}
+
+.proposals_pic {
+   width: 40px;
+   aspect-ratio: 1/1;
+   border: 1px solid white;
+   border-radius: 50%;
+}
+
+.proposals_info {
+   display: flex;
+   flex-direction: column;
+}
+
+.proposals_info h5 {
+   font-size: 0.85rem;
+}
+
+.proposals_info p {
+   font-size: 0.6875rem;
+   margin-top: 3px;
+}
+
+.status {
+   display: flex;
+   align-items: center;
+   gap: 5px;
+}
+
+.indicator {
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+   display: inline;
+}
+
+.review {
+   background-color: red;
+}
+
+.active {
+   background-color: greenyellow;
+}
+
+.proposals_body {
+   margin: 20px 0 20px 0;
+   font-size: 0.75rem;
+}
+
+.proposals_body p {
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 5;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+.see_more {
+   background: none;
+   color: white;
+   font-weight: bold;
+   cursor: pointer;
+   margin-top: 5px;
+   border-radius: 4px;
+   text-decoration: none;
+}
+
+.see_more:hover {
+   text-decoration: underline;
+   text-underline-offset: 3px;
+}

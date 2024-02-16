@@ -1,11 +1,11 @@
-import "./stats.css"
+import styles from "./stats.module.css"
 
 export default function Stats() {
    return (
-      <div className="stats">
-         <div className="stat"></div>
-         <div className="stat"></div>
-         <div className="stat"></div>
+      <div className={styles.stats}>
+         <div className={styles.stat}></div>
+         <div className={styles.stat}></div>
+         <div className={styles.stat}></div>
       </div>
    )
 }

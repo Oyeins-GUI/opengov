@@ -1,28 +1,29 @@
-import "./connect.css"
-import stacksLogo from "../../assets/stacks-stx-logo.png"
-import { useAppSelector } from "../../hooks/useReduxStore"
+import styles from "./connect.module.css"
+import stacksLogo from "@/assets/stacks-stx-logo.png"
+import { useAppSelector } from "@/hooks/useReduxStore"
 import { RiArrowDropDownLine } from "react-icons/ri"
-import { userSession, authenticate, disconnect } from "../../utils/authenticate"
-import useUserAdress from "../../hooks/useUserAddress"
+import { userSession, authenticate, disconnect } from "@/utils/authenticate"
+import useUserAdress from "@/hooks/useUserAddress"
 import { useState } from "react"
+import { truncateAddress } from "@/utils/truncateAddress"
 
 export default function ConnectWallet() {
    const [show, setShow] = useState(false)
    const chain = useAppSelector((state) => state.chain.chain)
-   const addressDisplayed = useUserAdress(chain)
+   const addressDisplayed = truncateAddress(useUserAdress(chain))
 
    if (userSession.isUserSignedIn()) {
       return (
-         <div className="user flex">
-            <div className="user-address flex" onClick={() => setShow((prev) => !prev)}>
+         <div className={`${styles.user} ${styles.flex}`}>
+            <button className={`${styles.user_address} ${styles.flex}`} onClick={() => setShow((prev) => !prev)}>
                <img src={stacksLogo} alt="stacks logo" />
                <p>{addressDisplayed}</p>
                <RiArrowDropDownLine />
-            </div>
+            </button>
             {show && (
                <button
                   type="button"
-                  className="disconnect"
+                  className={`${styles.disconnect}`}
                   onClick={() => {
                      disconnect()
                   }}
@@ -36,7 +37,7 @@ export default function ConnectWallet() {
 
    return (
       <button
-         className="connect"
+         className={`${styles.connect}`}
          onClick={() => {
             authenticate()
          }}

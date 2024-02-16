@@ -1,4 +1,4 @@
-import "./form.css"
+import styles from "./form.module.css"
 import FormSection from "@/components/FormSection"
 import { IoIosClose } from "react-icons/io"
 import { useForm } from "react-hook-form"
@@ -7,24 +7,29 @@ import { DefaultFormValues, CloseModal } from "@/types"
 import { userSession, authenticate } from "@/utils/authenticate"
 import { createProposalContractCall } from "@/utils/createProposalContractCall"
 import { useAppSelector } from "@/hooks/useReduxStore"
+import useUserAdress from "@/hooks/useUserAddress"
+import InputGroup from "../InputGroup"
 
 export default function ProposalForm({ closeModal }: CloseModal) {
    const chain = useAppSelector((state) => state.chain.chain)
+   const userAddress = useUserAdress(chain !== "testnet" ? "testnet" : "mainnet")
 
    const [nicheError, setNicheError] = useState("")
    const defaultFormValues: DefaultFormValues = {
       title: "",
       niche: "none",
-      problem: "",
-      solution: "",
+      description: "",
       milestones: "",
-      amountNeeded: 500,
+      "amount-needed": 500,
+      "amount-gotten": 0,
+      github: "",
       twitter: "",
       discord: "",
       likes: 0,
       dislikes: 0,
-      inReview: true,
-      additionalResource: "",
+      "in-review": true,
+      "additional-resource": "",
+      "proposer-address": userAddress,
    }
    const {
       formState: { errors },
@@ -37,7 +42,6 @@ export default function ProposalForm({ closeModal }: CloseModal) {
 
    const onSubmit = async (data: DefaultFormValues) => {
       if (!userSession.isUserSignedIn()) {
-         closeModal()
          authenticate()
       } else {
          if (data?.niche === "none") {
@@ -45,93 +49,63 @@ export default function ProposalForm({ closeModal }: CloseModal) {
             return
          } else {
             setNicheError("")
-            await createProposalContractCall(data, chain)
             reset()
-            closeModal()
+            // closeModal()
+            await createProposalContractCall(data, chain)
          }
       }
    }
 
    return (
-      <form method="dialog" noValidate onSubmit={handleSubmit(onSubmit)} autoComplete="false" className="form">
-         <div className="form-header">
+      <form method="dialog" noValidate onSubmit={handleSubmit(onSubmit)} autoComplete="false" className={styles.form}>
+         <div className={styles.form_header}>
             <h3>Create a Proposal</h3>
-            <button className="close-modal" onClick={closeModal}>
+            <button className={styles.close_modal} onClick={closeModal}>
                <IoIosClose />
             </button>
          </div>
-         <p>Warning: Make sure you have a BNS name</p>
-         <div className="input-group">
-            <label htmlFor="title">Title</label>
+
+         <InputGroup label="Title" error={errors.title}>
             <input
                type="text"
-               id="title"
                placeholder="Enter proposal title"
                {...register("title", {
                   required: "Title is required",
                })}
             />
-            <p className="error">{errors.title?.message}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="niche">Niche</label>
+         <InputGroup label="Niche" error={nicheError != "" ? nicheError : ""}>
             <FormSection register={register} setError={setNicheError} />
-            <p className="error">{nicheError != "" ? nicheError : ""}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="Problem">Problem</label>
+         <InputGroup label="Description" error={errors.description}>
             <textarea
-               id="Problem"
-               placeholder="Enter Problem"
+               placeholder="Description should include the problem and solution"
                cols={10}
                rows={5}
-               {...register("problem", {
-                  required: "Problem is required",
-                  // minLength: 300,
+               {...register("description", {
+                  required: "Description is required",
                })}
             />
-            <p className="error">{errors.problem?.message}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="solution">Solution</label>
+         <InputGroup label="Milestones" error={errors.milestones}>
             <textarea
-               id="solution"
-               placeholder="Enter solution"
-               cols={10}
-               rows={5}
-               {...register("solution", {
-                  required: "Solution is required",
-                  // minLength: 150,
-               })}
-            />
-            <p className="error">{errors.solution?.message}</p>
-         </div>
-
-         <div className="input-group">
-            <label htmlFor="milestones">Milestones</label>
-            <textarea
-               id="milestones"
                placeholder="Enter milestones"
                cols={10}
                rows={5}
                {...register("milestones", {
                   required: "Milestone(s) is/are required",
-                  // minLength: 150,
                })}
             />
-            <p className="error">{errors.milestones?.message}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="amount-needed">Amount Needed ($)</label>
+         <InputGroup label="Amount Needed ($)" error={errors["amount-needed"]}>
             <input
                type="number"
-               id="amount-needed"
                placeholder="Enter amount needed"
-               {...register("amountNeeded", {
+               {...register("amount-needed", {
                   required: "Amount needed is required",
                   max: {
                      message: "Must not be greater than 2500",
@@ -143,46 +117,37 @@ export default function ProposalForm({ closeModal }: CloseModal) {
                   },
                })}
             />
-            <p className="error">{errors.amountNeeded?.message}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="twitter">Twitter(X) Username</label>
+         <InputGroup label="Github" error={errors.github}>
+            <input type="text" placeholder="Enter github url" {...register("github")} />
+         </InputGroup>
+
+         <InputGroup label="Twitter(X) Username" error={errors.twitter}>
             <input
                type="text"
-               id="twitter"
                placeholder="Provide twitter username"
                {...register("twitter", {
                   required: "Twitter(X) username is required",
                })}
             />
-            <p className="error">{errors.twitter?.message}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="discord">Discord Username</label>
+         <InputGroup label="Discord Username" error={errors.discord}>
             <input
                type="text"
-               id="discord"
                placeholder="Provide discord username"
                {...register("discord", {
                   required: "Discord username is required",
                })}
             />
-            <p className="error">{errors.discord?.message}</p>
-         </div>
+         </InputGroup>
 
-         <div className="input-group">
-            <label htmlFor="additional-resource">Additional Resource</label>
-            <input
-               type="text"
-               id="additional-resource"
-               placeholder="Enter additional resource"
-               {...register("additionalResource")}
-            />
-         </div>
+         <InputGroup label="Additional Resource" error={errors.discord}>
+            <input type="text" placeholder="Enter additional resource" {...register("additional-resource")} />
+         </InputGroup>
 
-         <button type="submit" className="form-btn">
+         <button type="submit" className={styles.form_btn}>
             Create Proposal
          </button>
       </form>

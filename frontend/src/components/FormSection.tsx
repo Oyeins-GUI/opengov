@@ -1,4 +1,4 @@
-import { FormSelect } from "../types"
+import { FormSelect } from "@/types"
 
 export default function FormSection({ register, setError }: FormSelect) {
    return (

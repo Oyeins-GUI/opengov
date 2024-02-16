@@ -1,0 +1,12 @@
+.proposal_section {
+   max-width: 1080px;
+   margin: 0 auto 20px auto;
+   padding-inline: 10px;
+}
+
+.proposals {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+   margin-top: 15px;
+   gap: 20px;
+}

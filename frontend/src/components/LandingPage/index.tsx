@@ -1,16 +1,30 @@
-import "./landing-page.css"
+import styles from "./landing-page.module.css"
 import { GrAdd } from "react-icons/gr"
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6"
 import { useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import ProposalForm from "../ProposalForm"
-// import { userSession, authenticate } from "../../utils/authenticate"
 import Categories from "../Categories"
+import { useSearchParams } from "react-router-dom"
+import Dialog from "../Dialog"
 
 export default function LandingPage() {
    const [showCategories, setShowCategories] = useState(true)
    const dialogRef = useRef<HTMLDialogElement>(null)
-   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => e.target.getAttribute("data-name")
+   const [, setSearchParams] = useSearchParams()
+
+   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const target = e.target as HTMLButtonElement
+      const niche = target.getAttribute("data-name")
+
+      if (niche === null) {
+         setSearchParams("")
+         return
+      }
+
+      setSearchParams(`niche=${niche}`)
+   }
+
    const openModal = () => {
       dialogRef.current?.showModal()
    }
@@ -20,29 +34,29 @@ export default function LandingPage() {
 
    return (
       <>
-         <section className="section">
+         <section className={styles.section}>
             <h1>Decentralized Funding Network for Projects on Stacks</h1>
-            <p className="one-liner">OpenGov: Giving your project the push it deserves</p>
-            <button className="categories-btn" type="button" onClick={() => setShowCategories((prev) => !prev)}>
+            <p className={styles.one_liner}>OpenGov: Giving your project the push it deserves</p>
+            <button className={styles.categories_btn} type="button" onClick={() => setShowCategories((prev) => !prev)}>
                <p>{showCategories ? "Hide" : "Show"} Categories</p>
                {showCategories ? <FaAngleUp /> : <FaAngleDown />}
             </button>
-            <div className="categories">{showCategories && <Categories handleClick={handleClick} />}</div>
-            <div className="actions">
-               <div className="treasury">
+            <div className={styles.categories}>{showCategories && <Categories handleClick={handleClick} />}</div>
+            <div className={styles.actions}>
+               <div className={styles.treasury}>
                   <p>View treasury</p>
                </div>
-               {/* <div className="create" onClick={() => (userSession.isUserSignedIn() ? openModal() : authenticate())}> */}
-               <div className="create" onClick={() => openModal()}>
+               <div className={styles.create} onClick={() => openModal()}>
                   <GrAdd />
                   <p>Create a proposal</p>
                </div>
             </div>
          </section>
+
          {createPortal(
-            <dialog className="modal" ref={dialogRef}>
+            <Dialog dialogRef={dialogRef}>
                <ProposalForm closeModal={closeModal} />
-            </dialog>,
+            </Dialog>,
             document.getElementById("portal")!,
          )}
       </>

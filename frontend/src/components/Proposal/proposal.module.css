@@ -1,0 +1,15 @@
+.section {
+   max-width: 1080px;
+   margin: 50px auto 20px auto;
+   padding-inline: 10px;
+}
+
+.proposal_info {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   background-color: rgb(2, 2, 216);
+   border-radius: 12px;
+   color: white;
+   padding: 20px 30px;
+}

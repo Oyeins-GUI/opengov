@@ -15,13 +15,15 @@ ul {
 .header {
    max-width: 1080px;
    margin: 0 auto;
-   /* background: linear-gradient(33deg, rgba(16, 0, 46, 0.5), rgb(17, 17, 17)); */
-   /* background-color: #1f1e1e; */
+   background: linear-gradient(300deg, rgb(16, 0, 46), rgb(17, 17, 17));
+   background-color: #1f1e1e;
    display: flex;
    align-items: center;
    justify-content: space-between;
    height: 70px;
    padding: 0 10px;
+   position: sticky;
+   top: 0;
 }
 
 .sidebar {
@@ -59,14 +61,14 @@ ul {
    font-weight: 600;
 }
 
-.chain-options {
-   gap: 30px;
+.chain_options {
+   gap: 20px;
    padding: 10px;
 }
 
 @media (max-width: 800px) {
-   .chain-options {
-      gap: 10px;
+   .chain_options {
+      gap: 5px;
    }
 }
 
