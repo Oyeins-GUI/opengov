@@ -5,7 +5,7 @@ type ChainType = {
 }
 
 const initialState: ChainType = {
-   chain: "mainnet",
+   chain: "testnet",
 }
 
 export const chainTypeSlice = createSlice({
