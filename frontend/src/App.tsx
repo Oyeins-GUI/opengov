@@ -2,38 +2,22 @@ import { useEffect } from "react"
 import "./App.css"
 import Header from "./components/Header"
 import LandingPage from "./components/LandingPage"
-import { storage, userSession } from "./utils/authenticate"
+import { useAppDispatch } from "./hooks/useReduxStore"
+import { getProposals } from "./features/proposals/proposalSlice"
+import Proposals from "./components/Proposals"
 
 function App() {
-   useEffect(() => {
-      async function getFile() {
-         if (userSession.isUserSignedIn()) {
-            const files: Promise<string | undefined | ArrayBuffer | null>[] = []
-            const options = { decrypt: true }
-            await storage.listFiles((filename: string) => {
-               if (filename === "proposal.json") {
-                  files.push(storage.getFile(filename, options))
-                  // return false to stop iterating through files
-                  return false
-               } else {
-                  // return true to continue iterating
-                  return true
-               }
-            })
-            const fileContents = await Promise.all(files)
+   const dispatch = useAppDispatch()
 
-            fileContents.forEach((content) => {
-               console.log(JSON.parse(content?.toString() as string))
-            })
-         }
-      }
-      getFile()
-   }, [])
+   useEffect(() => {
+      dispatch(getProposals())
+   }, [dispatch])
 
    return (
       <>
          <Header />
          <LandingPage />
+         <Proposals />
       </>
    )
 }
