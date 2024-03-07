@@ -5,11 +5,14 @@ import { StacksMainnet, StacksTestnet } from "@stacks/network"
 import { DefaultFormValues } from "@/types"
 // import { sha256 } from "js-sha256"
 import { databases, databaseId, proposalCollection, ID } from "@/lib/appwrite"
+import getTxUpdate, { getTxUpdateWs } from "./getTxUpdate"
 
-type Chain = "mainnet" | "testnet" | "devnet"
+export type Chain = "mainnet" | "testnet" | "devnet"
 
 export async function createProposalContractCall(data: DefaultFormValues, chain: Chain) {
    // const hash = sha256(JSON.stringify(data))
+
+   const network = chain === "mainnet" ? new StacksMainnet() : new StacksTestnet()
 
    const createDocument = await databases.createDocument(databaseId, proposalCollection, ID.unique(), data)
 
@@ -23,14 +26,23 @@ export async function createProposalContractCall(data: DefaultFormValues, chain:
          functionArgs: [stringAsciiCV("title"), stringAsciiCV("niche"), stringAsciiCV("description")],
          senderKey: userSession.loadUserData().appPrivateKey,
          validateWithAbi: true,
-         network: chain === "mainnet" ? new StacksMainnet() : new StacksTestnet(),
+         network,
          postConditions: [],
          anchorMode: AnchorMode.Any,
          onFinish: async (txData: { txId: unknown }) => {
-            window.open(`https://explorer.hiro.so/txid/0x${txData.txId}?chain=testnet`)
-            window.location.reload()
+            window.open(`https://explorer.hiro.so/txid/${txData.txId}?chain=testnet`)
+
+            getTxUpdateWs(`${txData.txId}`, databaseId, proposalCollection, createDocument.$id, chain)
+
+            setInterval(
+               () =>
+                  getTxUpdate(`${txData.txId}`, network.coreApiUrl, databaseId, proposalCollection, createDocument.$id),
+               60000,
+            )
          },
-         onCancel: () => {
+         onCancel: async () => {
+            await databases.deleteDocument(databaseId, proposalCollection, createDocument.$id)
+
             alert("You cancelled the transaction")
          },
       }

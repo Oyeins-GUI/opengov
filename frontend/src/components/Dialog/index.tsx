@@ -5,7 +5,7 @@ export default function Dialog({
    dialogRef,
 }: {
    children: React.ReactNode
-   dialogRef: React.RefObject<HTMLDialogElement>
+   dialogRef: React.RefObject<HTMLDialogElement> | undefined
 }) {
    return (
       <dialog className={styles.modal} ref={dialogRef}>

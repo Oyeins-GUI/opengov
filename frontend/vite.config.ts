@@ -10,4 +10,5 @@ export default defineConfig({
          "@": resolve(__dirname, "./src"),
       },
    },
+   // optimizeDeps: { exclude: ["@clarity-types/core-win32-x64-msvc"] },
 })

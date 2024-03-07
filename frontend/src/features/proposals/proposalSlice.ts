@@ -1,7 +1,8 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { Models, databaseId, databases, proposalCollection } from "@/lib/appwrite"
+import { Query } from "appwrite"
 
-type Proposals = Models.DocumentList<Models.Document> & {
+export type Proposals = Models.DocumentList<Models.Document> & {
    state: "idle" | "loading" | "done" | "failed"
 }
 
@@ -12,53 +13,53 @@ const initialState: Proposals = {
 }
 
 export const proposalSlice = createSlice({
-   name: "chain",
+   name: "proposals",
    initialState,
-   reducers: {},
+   reducers: {
+      filterProposals(state, payload) {
+         console.log(payload.payload)
+
+         const filteredProposals = state.documents.filter((doc) => doc.niche === payload.payload)
+         state.documents = filteredProposals
+         state.total = filteredProposals.length
+      },
+   },
    extraReducers(builder) {
       builder
-         .addCase(getProposals.pending, (state) => {
+         .addCase(getMainnetProposals.pending, (state) => {
             state.state = "loading"
          })
-         .addCase(getProposals.fulfilled, (state, payload: PayloadAction<Models.DocumentList<Models.Document>>) => {
+         .addCase(getMainnetProposals.fulfilled, (state, payload) => {
             state.state = "done"
             state.total = payload.payload.total
             state.documents = payload.payload.documents
          })
-         .addCase(getProposals.rejected, (state) => {
+         .addCase(getMainnetProposals.rejected, (state) => {
             state.state = "failed"
          })
-         .addCase(
-            filterProposals.fulfilled,
-            (
-               state,
-               payload: PayloadAction<
-                  Models.Document[],
-                  string,
-                  {
-                     arg: string
-                     requestId: string
-                     requestStatus: "fulfilled"
-                  },
-                  never
-               >,
-            ) => {
-               // console.log({ state, payload })
-               state.documents = payload.payload
-            },
-         )
+         .addCase(getTestnetProposals.pending, (state) => {
+            state.state = "loading"
+         })
+         .addCase(getTestnetProposals.fulfilled, (state, payload) => {
+            state.state = "done"
+            state.total = payload.payload.total
+            state.documents = payload.payload.documents
+         })
+         .addCase(getTestnetProposals.rejected, (state) => {
+            state.state = "failed"
+         })
    },
 })
 
-export const getProposals = createAsyncThunk(
-   "proposals/get",
-   async () => await databases.listDocuments(databaseId, proposalCollection),
+export const getMainnetProposals = createAsyncThunk(
+   "proposals/get/mainnet",
+   async () => await databases.listDocuments(databaseId, proposalCollection, [Query.equal("chain", "mainnet")]),
 )
 
-export const filterProposals = createAsyncThunk("proposals/filter", async (niche: string) => {
-   const proposals = await databases.listDocuments(databaseId, proposalCollection)
-   return proposals.documents.filter((doc) => doc.niche === niche)
-})
+export const getTestnetProposals = createAsyncThunk(
+   "proposals/get/testnet",
+   async () => await databases.listDocuments(databaseId, proposalCollection, [Query.equal("chain", "testnet")]),
+)
 
-// export const { updateProposals, deleteProposal } = proposalSlice.actions
+export const { filterProposals } = proposalSlice.actions
 export default proposalSlice.reducer

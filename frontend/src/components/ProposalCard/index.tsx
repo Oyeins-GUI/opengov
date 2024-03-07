@@ -4,24 +4,35 @@ import { getRelativeTime } from "@/utils/getRelativeTime"
 import { Models } from "appwrite"
 import { Link } from "react-router-dom"
 import { FaXTwitter, FaGithub, FaCopy, FaThumbsUp, FaThumbsDown } from "react-icons/fa6"
+import useUserAdress from "@/hooks/useUserAddress"
+import { useAppDispatch, useAppSelector } from "@/hooks/useReduxStore"
+import reactToProposal from "@/utils/reactToProposal"
+import { StacksMainnet, StacksTestnet } from "@stacks/network"
 
 export default function ProposalCard({ proposal }: { proposal: Models.Document }) {
    const timestamp = new Date(proposal.$createdAt).getTime()
-   const url = `http://localhost:5173/proposal/${proposal.$id}`
+   const baseURL = "http://localhost:5173/proposal"
+   const URL = `${baseURL}/${proposal.$id}`
    const copyProposalURL = async () => {
       try {
-         await navigator.clipboard.writeText(url)
-         alert("Copied to clipboard")
+         await navigator.clipboard.writeText(URL)
+         alert("Proposal URL has been copied to clipboard")
       } catch (err) {
-         alert(`Failed to copy: ${err}`)
+         alert(`Failed to copy URL: ${err}`)
       }
    }
+   const chain = useAppSelector((state) => state.chain.chain)
+   const dispatch = useAppDispatch()
+   const userAddress = useUserAdress(chain)
+   const network = chain === "mainnet" ? new StacksMainnet() : new StacksTestnet()
+
+   const react = reactToProposal({ proposal, dispatch, chain, userAddress, network })
 
    return (
       <>
          <div className={styles.proposals} key={proposal.$id}>
             <div className={styles.proposals_header}>
-               <div className={styles.proposals_pic}></div>
+               {/* <div className={styles.proposals_pic}></div> */}
                <div className={styles.proposals_info}>
                   <h5>{capitalize(proposal.title)}</h5>
                   <p>
@@ -44,10 +55,10 @@ export default function ProposalCard({ proposal }: { proposal: Models.Document }
                   )}
                </div>
                <div className={styles.proposal_header_actions}>
-                  <button className={`${styles.btn}`}>
+                  <button className={`${styles.btn}`} onClick={() => react("like")}>
                      <FaThumbsUp /> {proposal.likes}
                   </button>
-                  <button className={`${styles.btn}`}>
+                  <button className={`${styles.btn}`} onClick={() => react("dislike")}>
                      <FaThumbsDown /> {proposal.dislikes}
                   </button>
                </div>

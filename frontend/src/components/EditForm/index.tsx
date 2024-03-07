@@ -1,37 +1,37 @@
-import styles from "./form.module.css"
+import styles from "./edit-form.module.css"
 import FormSection from "@/components/FormSection"
 import { IoIosClose } from "react-icons/io"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
-import { DefaultFormValues, CloseModal } from "@/types"
 import { userSession, authenticate } from "@/utils/authenticate"
 import { createProposalContractCall } from "@/utils/createProposalContractCall"
 import { useAppSelector } from "@/hooks/useReduxStore"
-import useUserAdress from "@/hooks/useUserAddress"
 import InputGroup from "../InputGroup"
+import { Models } from "appwrite"
+import { DefaultFormValues } from "@/types"
+// import { updateProposalContractCall } from "@/utils/updateProposalContractCall"
 
-export default function ProposalForm({ closeModal }: CloseModal) {
+export default function EditForm({ closeModal, proposal }: { closeModal: () => void; proposal: Models.Document }) {
    const chain = useAppSelector((state) => state.chain.chain)
-   const userAddress = useUserAdress(chain)
 
    const [nicheError, setNicheError] = useState("")
    const defaultFormValues: DefaultFormValues = {
-      title: "",
-      niche: "none",
-      description: "",
-      milestones: "",
-      "amount-needed": 500,
-      "amount-gotten": 0,
-      github: "",
-      twitter: "",
-      discord: "",
-      likes: 0,
-      dislikes: 0,
-      "in-review": true,
-      "additional-resource": "",
-      "proposer-address": userAddress,
-      chain: chain === "testnet" ? "testnet" : "mainnet",
-      reactions: "[]",
+      title: proposal.title,
+      niche: proposal.niche,
+      description: proposal.description,
+      milestones: proposal.milestones,
+      "amount-needed": proposal["amount-needed"],
+      "amount-gotten": proposal["amount-gotten"],
+      github: proposal.github,
+      twitter: proposal.twitter,
+      discord: proposal.discord,
+      likes: proposal.likes,
+      dislikes: proposal.dislikes,
+      "in-review": proposal["in-review"],
+      "additional-resource": proposal["additional-resource"],
+      "proposer-address": proposal["proposer-address"],
+      chain: proposal.chain,
+      reactions: proposal.reactions,
    }
    const {
       formState: { errors },
@@ -54,6 +54,7 @@ export default function ProposalForm({ closeModal }: CloseModal) {
             reset()
             // closeModal()
             await createProposalContractCall(data, chain)
+            // await updateProposalContractCall(data, chain, proposal)
          }
       }
    }
@@ -61,8 +62,8 @@ export default function ProposalForm({ closeModal }: CloseModal) {
    return (
       <form method="dialog" noValidate onSubmit={handleSubmit(onSubmit)} autoComplete="false" className={styles.form}>
          <div className={styles.form_header}>
-            <h3>Create a Proposal</h3>
-            <button className={styles.close_modal} onClick={closeModal}>
+            <h3>Edit Proposal</h3>
+            <button className={styles.close_modal} onClick={() => closeModal()}>
                <IoIosClose />
             </button>
          </div>
@@ -150,7 +151,7 @@ export default function ProposalForm({ closeModal }: CloseModal) {
          </InputGroup>
 
          <button type="submit" className={styles.form_btn}>
-            Create Proposal
+            Edit Proposal
          </button>
       </form>
    )

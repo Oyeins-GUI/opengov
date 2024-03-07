@@ -12,6 +12,7 @@
 .category:hover {
    scale: 0.95;
 }
+
 .category:focus,
 .category:focus-visible {
    border: 2px solid white;

@@ -1,15 +1,153 @@
+.flex {
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+}
+
 .section {
    max-width: 1080px;
-   margin: 50px auto 20px auto;
+   margin: 20px auto 20px auto;
    padding-inline: 10px;
 }
 
 .proposal_info {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
    background-color: rgb(2, 2, 216);
    border-radius: 12px;
    color: white;
-   padding: 20px 30px;
+   padding: 10px 20px;
+   font-size: 1.5rem;
+   font-weight: bold;
+}
+
+.proposal_info > div {
+   align-items: center;
+   justify-content: space-between;
+}
+
+.proposal_info button {
+   outline: none;
+   border: none;
+   background: none;
+   color: white;
+   cursor: pointer;
+}
+
+.info button {
+   border-radius: 50%;
+   width: 45px;
+   aspect-ratio: 1/1;
+   padding: 12px;
+   background: rgba(0, 0, 0, 0.1);
+   font-size: 1rem;
+   transition: background 0.1s linear;
+}
+
+.info button:hover {
+   background: rgba(0, 0, 0, 0.25);
+}
+
+.info .title {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   margin-left: 5px;
+}
+
+.state {
+   background: red;
+   color: white;
+   padding: 3px 10px;
+   border-radius: 160000000px;
+   font-size: 1rem;
+}
+
+.amount {
+   flex-direction: column;
+}
+
+.amount_in_stx {
+   font-size: 2.5rem;
+}
+
+.amount_in_usd {
+   font-size: 1rem;
+}
+
+.proposal_info .delegate {
+   padding: 12px;
+   border-radius: 16000000px;
+   background: white;
+   color: blue;
+   font-weight: bold;
+}
+
+.reactions {
+   gap: 20px;
+}
+
+.reactions button {
+   font-size: 1.25rem;
+}
+
+.overview {
+   margin-top: 20px;
+}
+
+.overview h5 {
+   margin-top: 10px;
+   font-weight: 800;
+}
+
+.actions {
+   /* display: flex; */
+   justify-content: center;
+   margin-top: 25px;
+}
+
+@media (max-width: 800px) {
+   .proposal_info {
+      padding: 10px;
+   }
+   .info button {
+      border-radius: 50%;
+      width: 30px;
+      aspect-ratio: 1/1;
+      padding: 6px;
+      background: rgba(0, 0, 0, 0.1);
+      font-size: 0.85rem;
+      transition: background 0.1s linear;
+   }
+
+   .info button:hover {
+      background: rgba(0, 0, 0, 0.25);
+   }
+
+   .info .title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 7px;
+      font-size: 1.15rem;
+   }
+   .amount_in_stx {
+      font-size: 1.2rem;
+   }
+
+   .amount_in_usd {
+      font-size: 0.8rem;
+   }
+   .reactions {
+      gap: 10px;
+   }
+   .reactions button {
+      font-size: 1rem;
+   }
+}
+
+.delete {
+   background: none;
+   color: red;
+   text-transform: uppercase;
+   border-radius: 3px;
+   padding: 8px 10px;
+   border: 1px solid red;
+   cursor: pointer;
 }

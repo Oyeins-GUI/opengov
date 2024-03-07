@@ -24,6 +24,8 @@ export type DefaultFormValues = {
    "in-review": boolean
    "additional-resource": string
    "proposer-address": string
+   chain: "testnet" | "mainnet"
+   reactions: string
 }
 
 export type HandleClick = {

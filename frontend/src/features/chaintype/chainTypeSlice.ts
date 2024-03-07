@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-type ChainType = {
+export type ChainType = {
    chain: "mainnet" | "testnet" | "devnet"
 }
 
