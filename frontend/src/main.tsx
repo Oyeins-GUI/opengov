@@ -7,6 +7,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Proposal from "./components/Proposal/index.tsx"
 import ErrorPage from "./components/ErrorPage/error.tsx"
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+const queryClient = new QueryClient()
+
 const router = createBrowserRouter([
    {
       path: "/",
@@ -20,21 +24,9 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-   <Provider store={store}>
-      {/* <Connect
-         authOptions={{
-            appDetails: {
-               name: "Open Gov",
-               icon: logo,
-            },
-            redirectTo: "/",
-            onFinish: () => {
-               window.location.reload()
-            },
-            userSession,
-         }}
-      > */}
-      <RouterProvider router={router} />
-      {/* </Connect> */}
-   </Provider>,
+   <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+         <RouterProvider router={router} />
+      </Provider>
+   </QueryClientProvider>,
 )
