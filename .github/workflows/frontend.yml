@@ -19,5 +19,5 @@ jobs:
 
          - name: Run lint and format
            run: |
-              npm install
+              npm install --legacy-peer-deps
               npm run lint
