@@ -2,15 +2,10 @@ import { openContractCall } from "@stacks/connect-react"
 import { userSession } from "./authenticate"
 import { AnchorMode, stringAsciiCV } from "@stacks/transactions"
 import { StacksMainnet, StacksTestnet } from "@stacks/network"
-// import { DefaultFormValues } from "@/types"
-// import { sha256 } from "js-sha256"
-import { Models } from "@/lib/appwrite"
-// import getTxUpdate from "./getTxUpdate"
-// import { Transaction } from "mongodb"
 
 export type Chain = "mainnet" | "testnet" | "devnet"
 
-export async function updateProposalContractCall(chain: Chain, updatedProposal: Models.Document) {
+export async function updateProposalContractCall(chain: Chain) {
    // const hash = sha256(JSON.stringify(data))
    const network = chain === "mainnet" ? new StacksMainnet() : new StacksTestnet()
 

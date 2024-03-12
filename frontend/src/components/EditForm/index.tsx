@@ -9,7 +9,6 @@ import { useAppSelector } from "@/hooks/useReduxStore"
 import InputGroup from "../InputGroup"
 import { Models } from "appwrite"
 import { DefaultFormValues } from "@/types"
-// import { updateProposalContractCall } from "@/utils/updateProposalContractCall"
 
 export default function EditForm({ closeModal, proposal }: { closeModal: () => void; proposal: Models.Document }) {
    const chain = useAppSelector((state) => state.chain.chain)
