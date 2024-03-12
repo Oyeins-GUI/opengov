@@ -86,9 +86,9 @@ export default function Proposal() {
             <div className={styles.overview}>
                <h5>Description:</h5>
                <p className={styles.description}>{proposal.description}</p>
+
                <h5>Milestones:</h5>
-               <br />
-               <p className={styles.miletones}>{proposal.miletones}</p>
+               <p className={styles.miletones}>{proposal.milestones}</p>
             </div>
 
             {proposal["proposer-address"] === userAddress && (

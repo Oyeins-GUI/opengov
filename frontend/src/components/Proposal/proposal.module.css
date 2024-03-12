@@ -147,6 +147,7 @@
    color: red;
    text-transform: uppercase;
    border-radius: 3px;
+   margin-top: 30px;
    padding: 8px 10px;
    border: 1px solid red;
    cursor: pointer;

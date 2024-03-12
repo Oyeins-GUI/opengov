@@ -3,7 +3,6 @@ import { Proposals, getMainnetProposals, getTestnetProposals } from "@/features/
 import { Models, databaseId, databases, proposalCollection } from "@/lib/appwrite"
 import { Dispatch, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit"
 import { authenticate, userSession } from "./authenticate"
-import { StacksMainnet, StacksTestnet } from "@stacks/network"
 
 type ReactToProposalArgs = {
    proposal: Models.Document
@@ -18,10 +17,9 @@ type ReactToProposalArgs = {
       Dispatch<UnknownAction>
    chain: "mainnet" | "testnet" | "devnet"
    userAddress: unknown
-   network: StacksMainnet | StacksTestnet
 }
 
-const reactToProposal = ({ proposal, dispatch, chain, userAddress, network }: ReactToProposalArgs) => {
+const reactToProposal = ({ proposal, dispatch, chain, userAddress }: ReactToProposalArgs) => {
    const reactions = JSON.parse(proposal?.reactions) as unknown[]
 
    return async (type: "like" | "dislike") => {
@@ -47,7 +45,6 @@ const reactToProposal = ({ proposal, dispatch, chain, userAddress, network }: Re
                dislikes: Number(proposal?.dislikes) + 1,
                reactions: JSON.stringify(reactions),
             })
-            console.log(network)
          }
       }
 
