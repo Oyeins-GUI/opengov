@@ -9,8 +9,6 @@
 (define-constant ERR_UNAUTHORIZED (err u200))
 (define-constant ERR_ID_DOES_NOT_EXIST (err u400))
 
-(define-data-var pool-percent uint u30)
-
 (define-map Proposals { proposal-id: (string-ascii 23) } { 
       data-hash: (buff 32),
       proposer: principal
@@ -45,7 +43,7 @@
          (proposer (get proposer proposal))
       )
       ;; #[filter(proposal-id, new-data-hash)]
-      (asserts! (is-eq tx-sender proposer) ERR_UNAUTHORIZED)
+      (asserts! (is-eq contract-caller proposer) ERR_UNAUTHORIZED)
       (ok (map-set Proposals { proposal-id: proposal-id } {data-hash: new-data-hash, proposer: tx-sender}))
    )
 )
@@ -66,4 +64,4 @@
 (define-read-only (get-voter (address principal) (proposal-id (string-ascii 23)))
    (map-get? Voters { address: address, proposal-id: proposal-id })
 )
-
+ 
