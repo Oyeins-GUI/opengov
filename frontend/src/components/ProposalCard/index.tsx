@@ -7,7 +7,6 @@ import { FaXTwitter, FaGithub, FaCopy, FaThumbsUp, FaThumbsDown } from "react-ic
 import useUserAdress from "@/hooks/useUserAddress"
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxStore"
 import reactToProposal from "@/utils/reactToProposal"
-import { StacksMainnet, StacksTestnet } from "@stacks/network"
 
 export default function ProposalCard({ proposal }: { proposal: Models.Document }) {
    const timestamp = new Date(proposal.$createdAt).getTime()
@@ -24,9 +23,8 @@ export default function ProposalCard({ proposal }: { proposal: Models.Document }
    const chain = useAppSelector((state) => state.chain.chain)
    const dispatch = useAppDispatch()
    const userAddress = useUserAdress(chain)
-   const network = chain === "mainnet" ? new StacksMainnet() : new StacksTestnet()
 
-   const react = reactToProposal({ proposal, dispatch, chain, userAddress, network })
+   const react = reactToProposal({ proposal, dispatch, chain, userAddress })
 
    return (
       <>
