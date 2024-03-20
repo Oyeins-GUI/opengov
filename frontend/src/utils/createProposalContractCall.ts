@@ -6,17 +6,9 @@ import { DefaultFormValues } from "@/types"
 import { sha256 } from "js-sha256"
 import { databases, databaseId, proposalCollection, ID } from "@/lib/appwrite"
 
-import { defineContract } from "clarity-types"
-import { OpengovMainContract } from "../../../contract/contracts/types/opengov"
-
 export type Chain = "mainnet" | "testnet" | "devnet"
 
 export async function createProposalContractCall(data: DefaultFormValues, chain: Chain) {
-   const openGovContract = defineContract<OpengovMainContract>({
-      contractAddress: "ST16FECHZJPM4Z95D0Y2G7MSPGK0JHHCAE3JT049N",
-      contractName: "opengov-alpha",
-   })
-
    const hash = sha256(JSON.stringify(data))
    const uint8Array = new Uint8Array(hash.length)
 
@@ -28,10 +20,10 @@ export async function createProposalContractCall(data: DefaultFormValues, chain:
 
    if (createDocument.$id) {
       await openContractCall({
-         ...openGovContract.callOptions({
-            functionName: "create-proposal",
-            functionArgs: [stringAsciiCV(createDocument.$id), bufferCV(uint8Array)],
-         }),
+         contractAddress: "ST16FECHZJPM4Z95D0Y2G7MSPGK0JHHCAE3JT049N",
+         contractName: "opengov-alpha",
+         functionName: "create-proposal",
+         functionArgs: [stringAsciiCV(createDocument.$id), bufferCV(uint8Array)],
          senderKey: userSession.loadUserData().appPrivateKey,
          network,
          postConditions: [],
