@@ -27,7 +27,6 @@
       discord: (string-ascii 128),
       likes: uint,
       dislikes: uint,
-      in-review: bool,
       additional-resource: (string-ascii 128),
       proposer: principal
    }
@@ -48,7 +47,7 @@
          (amount-to-proposal (- amount amount-to-pool))
       )
       (try! (stx-transfer? amount-to-pool tx-sender POOL_ADDRESS))
-      (ok { amount-to-proposal: amount-to-proposal })
+      (ok amount-to-proposal)
    )
 )
 
@@ -60,21 +59,18 @@
          (proposal (unwrap! (map-get? Proposals { proposal-id: proposal-id }) ERR_ID_DOES_NOT_EXIST))
          (amount-needed (get amount-needed proposal))
          (amount-gotten (get amount-gotten proposal))
-         (in-review (get in-review proposal))
          (proposer (get proposer proposal))
          (percentage (unwrap-panic (calculate-percentage amount)))
-         (amount-to-proposal (get amount-to-proposal percentage))
+         (amount-to-proposal percentage)
          (remainder (- amount-needed amount-gotten))
       )
       (if (>= amount-to-proposal remainder)
          (if (> (- amount-to-proposal remainder) u0)
             (begin 
-               (map-set Proposals { proposal-id: proposal-id } (merge proposal { amount-gotten: (+ amount-gotten remainder), in-review: true }))
                (try! (stx-transfer? remainder tx-sender proposer))
                (stx-transfer? (- amount-to-proposal remainder) tx-sender POOL_ADDRESS)
             )
             (begin 
-               (map-set Proposals { proposal-id: proposal-id } (merge proposal { amount-gotten: (+ amount-gotten remainder), in-review: true }))
                (stx-transfer? remainder tx-sender proposer)
             )
          )
@@ -119,7 +115,6 @@
             discord: discord,
             likes: u0,
             dislikes: u0,
-            in-review: true,
             additional-resource: additional-resource,
             proposer: tx-sender
       })
@@ -133,11 +128,9 @@
    (let 
       (
          (proposal (unwrap! (map-get? Proposals { proposal-id: proposal-id }) ERR_ID_DOES_NOT_EXIST))
-         (in-review (get in-review proposal))
       )
       ;; #[filter(proposal-id)]
       (asserts! (> amount u1) ERR_INVALID_AMOUNT)
-      (asserts! (is-eq in-review true) ERR_STILL_IN_REVIEW)
       (transfer proposal-id amount)
    )
 )
