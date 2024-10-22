@@ -134,3 +134,213 @@ describe("test delegate function", () => {
       expect(delegateResponse.result).toBeErr(Cl.uint(401));
    });
 });
+
+describe("test like proposal function", () => {
+   it("should successfully create a proposal and allow other users to like the proposal", () => {
+      const { result } = simnet.callPublicFn(
+         "opengov",
+         "create-proposal",
+         [
+            Cl.stringAscii(title),
+            Cl.stringAscii(niche),
+            Cl.stringAscii(problem),
+            Cl.stringAscii(solution),
+            Cl.stringAscii(milestone),
+            Cl.stringAscii(twitter),
+            Cl.stringAscii(discord),
+            Cl.uint(amountNeeded),
+            Cl.stringAscii(additionalResource),
+         ],
+         address1
+      );
+
+      expect(result).toBeOk(Cl.uint(id + 1));
+
+      //  Like a proposal
+      const likeProposalResponse = simnet.callPublicFn(
+         "opengov",
+         "like-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(likeProposalResponse.result).toBeOk(Cl.bool(true));
+   });
+
+   it("should successfully create a proposal and fail when when a user has already liked the proposal", () => {
+      const { result } = simnet.callPublicFn(
+         "opengov",
+         "create-proposal",
+         [
+            Cl.stringAscii(title),
+            Cl.stringAscii(niche),
+            Cl.stringAscii(problem),
+            Cl.stringAscii(solution),
+            Cl.stringAscii(milestone),
+            Cl.stringAscii(twitter),
+            Cl.stringAscii(discord),
+            Cl.uint(amountNeeded),
+            Cl.stringAscii(additionalResource),
+         ],
+         address1
+      );
+
+      expect(result).toBeOk(Cl.uint(id + 1));
+
+      //  Like proposal
+      const likeProposalResponse = simnet.callPublicFn(
+         "opengov",
+         "like-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(likeProposalResponse.result).toBeOk(Cl.bool(true));
+
+      const likeProposalResponse2 = simnet.callPublicFn(
+         "opengov",
+         "like-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(likeProposalResponse2.result).toBeErr(Cl.uint(402));
+   });
+});
+
+describe("test dislike proposal function", () => {
+   it("should successfully create a proposal and allow other users to dislike the proposal", () => {
+      const { result } = simnet.callPublicFn(
+         "opengov",
+         "create-proposal",
+         [
+            Cl.stringAscii(title),
+            Cl.stringAscii(niche),
+            Cl.stringAscii(problem),
+            Cl.stringAscii(solution),
+            Cl.stringAscii(milestone),
+            Cl.stringAscii(twitter),
+            Cl.stringAscii(discord),
+            Cl.uint(amountNeeded),
+            Cl.stringAscii(additionalResource),
+         ],
+         address1
+      );
+
+      expect(result).toBeOk(Cl.uint(id + 1));
+
+      //  Like a proposal
+      const dislikeProposalResponse = simnet.callPublicFn(
+         "opengov",
+         "dislike-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(dislikeProposalResponse.result).toBeOk(Cl.bool(true));
+   });
+
+   it("should successfully create a proposal and fail when when a user has already disliked the proposal", () => {
+      const { result } = simnet.callPublicFn(
+         "opengov",
+         "create-proposal",
+         [
+            Cl.stringAscii(title),
+            Cl.stringAscii(niche),
+            Cl.stringAscii(problem),
+            Cl.stringAscii(solution),
+            Cl.stringAscii(milestone),
+            Cl.stringAscii(twitter),
+            Cl.stringAscii(discord),
+            Cl.uint(amountNeeded),
+            Cl.stringAscii(additionalResource),
+         ],
+         address1
+      );
+
+      expect(result).toBeOk(Cl.uint(id + 1));
+
+      //  dislike proposal
+      const dislikeProposalResponse = simnet.callPublicFn(
+         "opengov",
+         "dislike-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(dislikeProposalResponse.result).toBeOk(Cl.bool(true));
+
+      const dislikeProposalResponse2 = simnet.callPublicFn(
+         "opengov",
+         "dislike-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(dislikeProposalResponse2.result).toBeErr(Cl.uint(402));
+   });
+});
+
+describe("test delete proposal function", () => {
+   it("should successfully create a proposal and allow only proposer to delete it", () => {
+      const { result } = simnet.callPublicFn(
+         "opengov",
+         "create-proposal",
+         [
+            Cl.stringAscii(title),
+            Cl.stringAscii(niche),
+            Cl.stringAscii(problem),
+            Cl.stringAscii(solution),
+            Cl.stringAscii(milestone),
+            Cl.stringAscii(twitter),
+            Cl.stringAscii(discord),
+            Cl.uint(amountNeeded),
+            Cl.stringAscii(additionalResource),
+         ],
+         address1
+      );
+
+      expect(result).toBeOk(Cl.uint(id + 1));
+
+      //  delete a proposal
+      const deleteProposalResponse = simnet.callPublicFn(
+         "opengov",
+         "delete-proposal",
+         [Cl.uint(id + 1)],
+         address1
+      );
+
+      expect(deleteProposalResponse.result).toBeOk(Cl.bool(true));
+   });
+
+   it("should successfully create a proposal and fail when its not the proposer deleting it", () => {
+      const { result } = simnet.callPublicFn(
+         "opengov",
+         "create-proposal",
+         [
+            Cl.stringAscii(title),
+            Cl.stringAscii(niche),
+            Cl.stringAscii(problem),
+            Cl.stringAscii(solution),
+            Cl.stringAscii(milestone),
+            Cl.stringAscii(twitter),
+            Cl.stringAscii(discord),
+            Cl.uint(amountNeeded),
+            Cl.stringAscii(additionalResource),
+         ],
+         address1
+      );
+
+      expect(result).toBeOk(Cl.uint(id + 1));
+
+      //  delete a proposal
+      const deleteProposalResponse = simnet.callPublicFn(
+         "opengov",
+         "delete-proposal",
+         [Cl.uint(id + 1)],
+         address2
+      );
+
+      expect(deleteProposalResponse.result).toBeErr(Cl.uint(200));
+   });
+});
