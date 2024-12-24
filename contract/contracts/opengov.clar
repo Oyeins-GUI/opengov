@@ -168,9 +168,13 @@
 )
 
 (define-public (delete-proposal (proposal-id uint)) 
-   (begin
+   (let
+      (
+         (proposal (unwrap! (map-get? Proposals { proposal-id: proposal-id }) ERR_ID_DOES_NOT_EXIST))
+         (proposer (get proposer proposal))
+      )
       ;; #[filter(proposal-id)]
-      (asserts! (is-eq tx-sender CONTRACT_OWNER) ERR_UNAUTHORIZED)
+      (asserts! (is-eq tx-sender proposer) ERR_UNAUTHORIZED)
       (ok (map-delete Proposals { proposal-id: proposal-id }))
    )
 )
