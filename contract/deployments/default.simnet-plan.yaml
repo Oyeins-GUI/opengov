@@ -52,16 +52,16 @@ plan:
         - emulated-contract-publish:
             contract-name: opengov
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/opengov.clar
+            path: "contracts\\opengov.clar"
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: opengov-main
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/opengov-main.clar
+            path: "contracts\\opengov-main.clar"
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: test
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/test.clar
+            path: "contracts\\test.clar"
             clarity-version: 2
       epoch: "2.4"
